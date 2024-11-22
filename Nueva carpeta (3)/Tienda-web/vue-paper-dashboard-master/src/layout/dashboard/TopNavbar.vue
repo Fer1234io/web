@@ -1,7 +1,10 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light">
+  <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container-fluid">
+      <!-- Logo o nombre de la ruta -->
       <a class="navbar-brand" href="#">{{ routeName }}</a>
+
+      <!-- Botón para colapsar el sidebar (responsive) -->
       <button
         class="navbar-toggler navbar-burger"
         type="button"
@@ -13,37 +16,13 @@
         <span class="navbar-toggler-bar"></span>
         <span class="navbar-toggler-bar"></span>
       </button>
-      <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-panel"></i>
-              <p>Stats</p>
-            </a>
-          </li>
-          <drop-down
-            class="nav-item"
-            title="5 Notifications"
-            title-classes="nav-link"
-            icon="ti-bell"
-          >
-            <a class="dropdown-item" href="#">Notification 1</a>
-            <a class="dropdown-item" href="#">Notification 2</a>
-            <a class="dropdown-item" href="#">Notification 3</a>
-            <a class="dropdown-item" href="#">Notification 4</a>
-            <a class="dropdown-item" href="#">Another notification</a>
-          </drop-down>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-settings"></i>
-              <p>Settings</p>
-            </a>
-          </li>
-        </ul>
-      </div>
+
+      <!-- Espacio vacío para un diseño limpio -->
+      <div class="collapse navbar-collapse"></div>
     </div>
   </nav>
 </template>
+
 <script>
 export default {
   computed: {
@@ -52,28 +31,61 @@ export default {
       return this.capitalizeFirstLetter(name);
     },
   },
-  data() {
-    return {
-      activeNotifications: false,
-    };
-  },
   methods: {
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
-    toggleNotificationDropDown() {
-      this.activeNotifications = !this.activeNotifications;
-    },
-    closeDropDown() {
-      this.activeNotifications = false;
-    },
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
-    },
-    hideSidebar() {
-      this.$sidebar.displaySidebar(false);
     },
   },
 };
 </script>
-<style></style>
+
+<style scoped>
+/* Estilo del Navbar */
+.navbar-custom {
+  background: linear-gradient(45deg, #6a11cb, #2575fc); /* Mantener el mismo color */
+  color: #ffffff;
+  padding: 10px 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo del logo o título */
+.navbar-custom .navbar-brand {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-custom .navbar-brand:hover {
+  color: #ffdd59;
+}
+
+/* Botón de colapso */
+.navbar-custom .navbar-toggler {
+  border: none;
+  background: transparent;
+}
+
+.navbar-custom .navbar-toggler-bar {
+  width: 25px;
+  height: 3px;
+  background-color: #ffffff;
+  margin: 4px 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar-custom .navbar-toggler:hover .navbar-toggler-bar {
+  background-color: #ffdd59;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar-custom .navbar-brand {
+    font-size: 1.2em;
+  }
+}
+</style>

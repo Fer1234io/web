@@ -6,12 +6,13 @@
           <sidebar-link to="/cliente/stats" name="Mi Perfil" icon="ti-user" />
           <sidebar-link to="/cliente/historial" name="Historial de Compras" icon="ti-receipt" />
           <sidebar-link to="/cliente/NuevoComponente" name="Productos" icon="ti-package" />
-
+          <sidebar-link to="/cliente/Ubicacion" name="Ubicacion" icon="ti-package" />
           <!-- Otros enlaces según sea necesario -->
   
           <!-- Botón de Cerrar Sesión -->
           <li>
-            <button @click="logout" class="logout-button">Cerrar Sesión</button>
+            <button @click="cerrarSesion">Cerrar Sesión</button>
+
           </li>
         </template>
   
@@ -33,21 +34,31 @@
   import ContentFooter from "./ContentFooter.vue";
   import DashboardContent from "./Content.vue";
   import MobileMenu from "./MobileMenu";
-import SideBar from "../../components/SidebarPlugin/SideBar.vue";
+  import SideBar from "../../components/SidebarPlugin/SideBar.vue";
   
   export default {
+    data() {
+    return {
+      userData: {}, // Guardará los datos del usuario
+    };
+  },
     components: {
       TopNavbar,
       ContentFooter,
       DashboardContent,
       MobileMenu,
     },
+    
     methods: {
-      toggleSidebar() {
-        if (this.$sidebar.showSidebar) {
-          this.$sidebar.displaySidebar(false);
-        }
-      },
+      cerrarSesion() {
+    localStorage.clear(); // Limpia todos los datos almacenados en localStorage
+    this.$router.push("/login"); // Redirige al usuario a la página de login
+  },
+  toggleSidebar() {
+    if (this.$sidebar.showSidebar) {
+      this.$sidebar.displaySidebar(false);
+    }
+  },
       logout() {
         // Eliminar los datos de autenticación del almacenamiento local
         localStorage.removeItem("role");

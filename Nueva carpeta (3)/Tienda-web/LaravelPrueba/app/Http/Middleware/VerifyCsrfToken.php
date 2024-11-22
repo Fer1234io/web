@@ -13,6 +13,12 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/login',
+        'tiendas',
+        'tiendas/*',
+        'descuentos',
+        'descuentos/*',
+        'descuentos-reactivar/*',
+        '/tienda-cercana',
         'estudiantes',
         'productos',
         'productos/*',
@@ -22,7 +28,20 @@ class VerifyCsrfToken extends Middleware
         'inventario/*',
         'usuarios',
         'usuarios/*',
-        'roles',
-        'roles/*',
+        'traslados',
+        'traslados/*', 
+        'ventas',
+        'ventas/*',
+        'detalle_ventas',
+        'detalle_ventas/*',
+        'reportes',
+        'reportes/*',
+        'reportes/generar',
+        '/reportes/bajo-inventario',
+        '/reportes/productos-por-mes',
+        '/reportes/productos-mas-vendidos-completo',
+        '/reportes/clientes-frecuentes',
+        '/reportes/compras-por-fecha',
+        '/reportes/detalle-compra'
     ];    
 }

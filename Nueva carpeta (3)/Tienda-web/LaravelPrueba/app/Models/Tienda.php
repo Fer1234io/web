@@ -9,19 +9,27 @@ class Tienda extends Model
 {
     use HasFactory;
 
-    protected $table = 'tiendas';              // Nombre de la tabla en la base de datos
-    protected $primaryKey = 'id_tienda';       // Llave primaria personalizada
+    protected $table = 'tiendas';
+    protected $primaryKey = 'id_tienda';
 
     protected $fillable = [
         'nombre_tienda',
         'direccion',
         'ciudad',
         'departamento',
+        'lat',
+        'lng',
     ];
 
     // Relación con el modelo Inventario
     public function inventarios()
     {
         return $this->hasMany(Inventario::class, 'id_tienda');
+    }
+
+    // Relación con el modelo Venta
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'id_tienda', 'id_tienda');
     }
 }

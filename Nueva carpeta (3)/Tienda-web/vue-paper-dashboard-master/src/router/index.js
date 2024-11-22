@@ -12,24 +12,31 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ["/login"];
-  const authRequired = !publicPages.includes(to.path);
-  const userRole = localStorage.getItem("role");
+  const publicPages = ["/login", "/crear-cuenta"]; // Agrega /crear-cuenta como pública
 
-  if (authRequired && !userRole) {
+  const authRequired = !publicPages.includes(to.path);
+  const userData = JSON.parse(localStorage.getItem("userData")); // Extraemos datos del usuario
+
+  // Si se requiere autenticación y no hay datos de usuario, redirige al login
+  if (authRequired && !userData) {
     return next("/login");
   }
 
-  if (to.path === "/login" && userRole) {
-    if (userRole === "Administrador") {
-      return next("/admin/dashboard");
-    } else if (userRole === "Gerente") {
-      return next("/gerente/notifications");
-    } else {
-      return next("/login"); // O redirige a otra ruta predeterminada para otros roles
+  // Si está en la página de login y ya está autenticado, redirige según el rol
+  if (to.path === "/login" && userData) {
+    switch (userData.rol) {
+      case "Administrador":
+        return next("/admin/dashboard");
+      case "Gerente":
+        return next("/gerente/notifications");
+      case "Cliente":
+        return next("/cliente/stats");
+      default:
+        return next("/general/nuevo-componente");
     }
   }
 
+  // Permitir el acceso a la ruta solicitada
   next();
 });
 

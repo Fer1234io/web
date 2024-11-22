@@ -2,29 +2,32 @@
   <card class="card" :title="title">
     <div>
       <ul class="list-unstyled team-members">
-        <li>
-          <div class="row" v-for="member in members" :key="member.name">
+        <li v-for="member in members" :key="member.id_usuario">
+          <div class="row">
             <div class="col-3">
               <div class="avatar">
                 <img
-                  :src="member.image"
+                  :src="member.image || defaultImage"
                   alt="Circle Image"
                   class="rounded img-fluid"
                 />
               </div>
             </div>
             <div class="col-6">
-              {{ member.name }}
+              <strong>{{ member.nombre }} {{ member.apellido }}</strong>
+              <br />
+              <small>Teléfono: {{ member.numero_telefono }}</small>
+              <br />
+              <small>Dirección: {{ member.direccion }}</small>
               <br />
               <span :class="getStatusClass(member.status)">
                 <small>{{ member.status }}</small>
               </span>
             </div>
-
-            <div class="col-3">
-              <p-button type="success" outline icon>
+            <div class="col-3 text-end">
+              <button class="btn btn-success btn-sm">
                 <i class="fa fa-envelope"></i>
-              </p-button>
+              </button>
             </div>
           </div>
         </li>
@@ -32,28 +35,19 @@
     </div>
   </card>
 </template>
+
 <script>
 export default {
+  props: {
+    members: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
-      title: "Team members",
-      members: [
-        {
-          image: require("@/assets/img/faces/face-0.jpg"),
-          name: "Dj Khaled",
-          status: "Offline",
-        },
-        {
-          image: require("@/assets/img/faces/face-1.jpg"),
-          name: "Creative Tim",
-          status: "Available",
-        },
-        {
-          image: require("@/assets/img/faces/face-1.jpg"),
-          name: "Flume",
-          status: "Busy",
-        },
-      ],
+      title: "Team Members",
+      defaultImage: "https://via.placeholder.com/150", // Imagen predeterminada
     };
   },
   methods: {
@@ -66,10 +60,17 @@ export default {
         case "Busy":
           return "text-danger";
         default:
-          return "text-success";
+          return "text-muted";
       }
     },
   },
 };
 </script>
-<style></style>
+
+<style scoped>
+.avatar img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+</style>

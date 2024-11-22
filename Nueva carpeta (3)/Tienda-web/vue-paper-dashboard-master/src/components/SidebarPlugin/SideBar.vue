@@ -4,23 +4,19 @@
     :data-background-color="backgroundColor"
     :data-active-color="activeColor"
   >
-    <!--
-            Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black | darkblue"
-            Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-        -->
-    <!-- -->
     <div class="sidebar-wrapper" id="style-3">
+      <!-- Logo -->
       <div class="logo">
         <a href="#" class="simple-text">
           <div class="logo-img">
-            <img src="@/assets/img/vue-logo.png" alt="" />
+            <img src="@/assets/img/joseph.png" alt="Logo" />
           </div>
           {{ title }}
         </a>
       </div>
-      <slot> </slot>
+
+      <!-- Links -->
       <ul class="nav">
-        <!--By default vue-router adds an active class to each route link. This way the links are colored when clicked-->
         <slot name="links">
           <sidebar-link
             v-for="(link, index) in sidebarLinks"
@@ -32,40 +28,34 @@
           </sidebar-link>
         </slot>
       </ul>
-      <moving-arrow :move-y="arrowMovePx"> </moving-arrow>
+
+      <!-- Moving Arrow -->
+      <moving-arrow :move-y="arrowMovePx"></moving-arrow>
     </div>
   </div>
 </template>
+
 <script>
 import MovingArrow from "./MovingArrow.vue";
 import SidebarLink from "./SidebarLink";
+
 export default {
   props: {
     title: {
       type: String,
-      default: "Paper Dashboard",
+      default: "Store Online S.A",
     },
     backgroundColor: {
-      type: String,
-      default: "black",
-      validator: (value) => {
-        let acceptedValues = ["white", "black", "darkblue"];
-        return acceptedValues.indexOf(value) !== -1;
-      },
-    },
+  type: String,
+  default: "black", // Cambia el valor predeterminado al color deseado
+  validator: (value) => ["white", "black", "darkblue", "custom"].includes(value), // Agrega 'custom' o el nombre del color personalizado
+},
+
     activeColor: {
       type: String,
-      default: "success",
-      validator: (value) => {
-        let acceptedValues = [
-          "primary",
-          "info",
-          "success",
-          "warning",
-          "danger",
-        ];
-        return acceptedValues.indexOf(value) !== -1;
-      },
+      default: "primary",
+      validator: (value) =>
+        ["primary", "info", "success", "warning", "danger"].includes(value),
     },
     sidebarLinks: {
       type: Array,
@@ -88,10 +78,6 @@ export default {
     SidebarLink,
   },
   computed: {
-    /**
-     * Styles to animate the arrow near the current active sidebar link
-     * @returns {{transform: string}}
-     */
     arrowMovePx() {
       return this.linkHeight * this.activeLinkIndex;
     },
@@ -100,10 +86,6 @@ export default {
     return {
       linkHeight: 65,
       activeLinkIndex: 0,
-      windowWidth: 0,
-      isWindows: false,
-      hasAutoHeight: false,
-      links: [],
     };
   },
   methods: {
@@ -132,4 +114,74 @@ export default {
   },
 };
 </script>
-<style></style>
+
+<style scoped>
+.sidebar {
+  width: 250px;
+  background: linear-gradient(45deg, #2c3e50, #34495e); /* Color similar al footer */
+  color: #ecf0f1; /* Color del texto */
+  height: 100vh;
+  position: fixed;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Sombra */
+  overflow: auto;
+  transition: all 0.3s ease;
+}
+
+.sidebar-wrapper {
+  padding: 15px 10px;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo-img img {
+  max-width: 80px;
+  border-radius: 50%;
+  border: 2px solid #ecf0f1;
+}
+
+.nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav li {
+  margin: 10px 0;
+}
+
+.nav li a {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: #ecf0f1;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.nav li a:hover,
+.nav li a.active {
+  background-color: rgba(255, 255, 255, 0.1); /* Color hover */
+  color: #fff;
+}
+
+.nav li a i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+  .nav li a {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+}
+
+</style>
+

@@ -9,7 +9,8 @@ class Inventario extends Model
 {
     use HasFactory;
 
-    protected $table = 'inventario';           
+    protected $table = 'inventario'; // Especifica la tabla correcta
+          
     protected $primaryKey = 'id_inventario';   
     public $timestamps = true; 
 
@@ -32,4 +33,5 @@ class Inventario extends Model
     {
         return $this->belongsTo(Tienda::class, 'id_tienda');
     }
+    
 }

@@ -1,18 +1,10 @@
 import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
 import NotFound from "@/pages/NotFoundPage.vue";
 import Login from "@/components/Prueba/LoginComponent.vue";
-import Dashboard from "@/pages/Dashboard.vue";
-import UserProfile from "@/pages/UserProfile.vue";
-import Notifications from "@/pages/Notifications.vue";
-import Icons from "@/pages/Icons.vue";
-import Maps from "@/pages/Maps.vue";
-import Typography from "@/pages/Typography.vue";
-import TableList from "@/pages/TableList.vue";
-import InventarioAdmin from '@/components/Prueba/InventarioAdmin.vue';
-import ProductosAdmin from '@/components/Prueba/ProductosAdmin.vue';
 import AdminDashboardLayout from "@/layout/dashboard/AdminDashboardLayout.vue";
 import GerenteDashboardLayout from "@/layout/dashboard/GerenteDashboardLayout.vue";
 import ClienteDashboardLayout from "@/layout/dashboard/ClienteDashboardLayout.vue";
+import CrearCuenta from "@/components/Clientes/CrearCuenta.vue";
 
 const routes = [
   {
@@ -25,6 +17,11 @@ const routes = [
     component: Login,
   },
   {
+    path: "/crear-cuenta",
+    name: "crear-cuenta",
+    component: CrearCuenta,
+  },
+  {
     path: "/admin",
     component: AdminDashboardLayout,
     redirect: "/admin/dashboard",
@@ -33,7 +30,9 @@ const routes = [
       { path: "stats", name: "admin-stats", component: () => import("@/pages/UserProfile.vue") },
       { path: "table-list", name: "admin-table-list", component: () => import("@/pages/TableList.vue") },
       { path: "ProductosAdministrador", name: "Administrar Productos", component: () => import("@/components/Prueba/ProductosAdmin.vue") },
+      { path: "Descuentos", name: "Administrar Descuentos", component: () => import("@/components/Prueba/Descuentos.vue") },
       { path: "InventarioAdministrador", name: "Administrar Inventario", component: () => import("@/components/Prueba/InventarioAdmin.vue") },
+      { path: "TrasladosAdministrador", name: "Administrar Traslados", component: () => import("@/components/Prueba/TrasladosAdmin.vue")},
     ],
   },
   {
@@ -41,9 +40,18 @@ const routes = [
     component: GerenteDashboardLayout,
     redirect: "/gerente/notifications",
     children: [
+      { path: "stats", name: "admin-stats", component: () => import("@/pages/UserProfile.vue") },
       { path: "notifications", name: "gerente-notifications", component: () => import("@/pages/Notifications.vue") },
       { path: "stats", name: "gerente-stats", component: () => import("@/pages/UserProfile.vue") },
-      { path: "GerenteUsuario", name: "Administrar Usuarios", component: () => import("@/components/Prueba/GerenteUsuario.vue") },
+      { path: "Roles", name: "Administrar Accesos (roles)", component: () => import("@/components/Gerente/AdministrarRol.vue") },
+      { path: "Usuarios", name: "Administrar Usarios", component: () => import("@/components/Gerente/AdministrarUsuarios.vue") },
+      { path: "Reportes", name: "Administrar Reportes", component: () => import("@/components/Gerente/Reportes.vue") },
+      { path: "ReporteProducto", name: "Reportes Productos", component: () => import("@/components/Gerente/ReporteProducto.vue") },
+      { path: "BajoInventario", name: "Reportes Inventario Bajo", component: () => import("@/components/Gerente/ReporteBajoInventario.vue") },
+      { path: "ReporteGrafica", name: "Reportes Grafica Productos", component: () => import("@/components/Gerente/ReporteGrafica.vue") },
+      { path: "Reportes2", name: "Administrar Reportes 2", component: () => import("@/components/Gerente/ReporteDos.vue") },
+      { path: "ReportesClientes", name: "Clientes Reportes", component: () => import("@/components/Gerente/ReporteClientes.vue") },
+      { path: "ReportesFechas", name: "Reportes por Fechas", component: () => import("@/components/Gerente/ReporteFechas.vue") },
     ],
   },
   {
@@ -54,11 +62,15 @@ const routes = [
       { path: "stats", name: "cliente-stats", component: () => import("@/pages/UserProfile.vue") },
       { path: "historial", name: "cliente-historial", component: () => import("@/pages/TableList.vue") },
       { path: "NuevoComponente", name: "Productos", component: () => import("@/components/Prueba/NuevoComponente.vue") },
+      { path: "Ubicacion", name: "Ubicacion Actual", component: () => import("@/components/Clientes/Ubicacion.vue") },
+      { path: "resumen-compra", name: "Resumen Compra", component: () => import("@/components/Clientes/ResumenCompra.vue") }, // Nueva ruta
+      { path: "Camcelar-compra", name: "Cancelar Compra", component: () => import("@/components/Clientes/CancelarPago.vue") },
     ],
-  },
+  },  
   { path: "*", component: NotFound },
 ];
 
 
 
 export default routes;
+

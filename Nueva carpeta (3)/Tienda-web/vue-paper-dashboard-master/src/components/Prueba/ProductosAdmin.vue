@@ -11,6 +11,7 @@
           <th>Marca</th>
           <th>Modelo</th>
           <th>Precio</th>
+          <th>Descuento</th>
           <th>Categoría</th>
           <th>Imagen</th>
           <th>Acciones</th>
@@ -23,6 +24,7 @@
           <td>{{ producto.marca }}</td>
           <td>{{ producto.modelo }}</td>
           <td>Q {{ producto.precio }}</td>
+          <td>{{ producto.descuento ? producto.descuento.nombre : 'Sin descuento' }}</td>
           <td>{{ producto.categoria ? producto.categoria.nombre_categoria : 'Sin categoría' }}</td>
           <td>
             <img :src="'data:image/jpeg;base64,' + producto.fotografia_url" alt="Imagen del producto" class="product-image" />
@@ -66,6 +68,16 @@
             <label for="precio">Precio:</label>
             <input type="number" step="0.01" v-model="form.precio" required />
           </div>
+          <!-- Añadir un campo de selección en el formulario del modal -->
+          <div class="form-group">
+            <label for="id_descuento">Descuento:</label>
+            <select v-model="form.id_descuento" class="form-select">
+              <option value="">Sin descuento</option>
+              <option v-for="descuento in descuentos" :key="descuento.id_descuento" :value="descuento.id_descuento">
+                {{ descuento.nombre }}
+              </option>
+              </select>
+            </div>
 
           <div class="form-group">
             <label for="id_categoria">Categoría:</label>
@@ -97,6 +109,7 @@ export default {
     return {
       productos: [],
       categorias: [],
+      descuentos: [], // Lista de descuentos
       isModalOpen: false,
       isEditMode: false,
       form: {
@@ -107,6 +120,7 @@ export default {
         modelo: '',
         precio: '',
         id_categoria: '',
+        id_descuento: '', // Nuevo campo
         fotografia_url: ''
       },
     };
@@ -120,6 +134,14 @@ export default {
         console.error("Error al obtener los productos:", error);
       }
     },
+    async fetchDescuentos() {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/descuentos');
+      this.descuentos = response.data;
+    } catch (error) {
+      console.error("Error al obtener los descuentos:", error);
+    }
+  },
     async fetchCategorias() {
       try {
         const response = await axios.get('http://127.0.0.1:8000/categorias');
@@ -151,7 +173,8 @@ export default {
       modelo: '',
       precio: '',
       id_categoria: '',
-      fotografia_url: ''
+      fotografia_url: '',
+      id_descuento: '' // Resetear el descuento
     };
   },
     handleImageUpload(event) {
@@ -174,6 +197,7 @@ export default {
     formData.append('modelo', this.form.modelo);
     formData.append('precio', this.form.precio);
     formData.append('id_categoria', this.form.id_categoria);
+    formData.append('id_descuento', this.form.id_descuento);
     
     if (this.form.fotografia_url) {
       formData.append('fotografia_url', this.form.fotografia_url); // Base64 data
@@ -216,6 +240,7 @@ async eliminarProducto(producto) {
   created() {
     this.fetchProductos();
     this.fetchCategorias();
+    this.fetchDescuentos(); 
   },
 };
 </script>

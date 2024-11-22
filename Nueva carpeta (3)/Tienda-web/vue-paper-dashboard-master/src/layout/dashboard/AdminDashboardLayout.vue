@@ -7,6 +7,8 @@
           <sidebar-link to="/admin/table-list" name="Table List" icon="ti-view-list-alt" />
           <sidebar-link to="/admin/ProductosAdministrador" name="Productos" icon="ti-package" />
           <sidebar-link to="/admin/InventarioAdministrador" name="Inventario" icon="ti-package" />
+          <sidebar-link to="/admin/Descuentos" name="Descuentos" icon="ti-package" />
+          <sidebar-link to="/admin/TrasladosAdministrador" name="Traslados" icon="ti-package" />
           <!-- Otros enlaces específicos para el rol de Administrador -->
   
           <!-- Botón de Cerrar Sesión -->

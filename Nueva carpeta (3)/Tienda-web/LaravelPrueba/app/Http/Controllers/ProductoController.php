@@ -13,9 +13,18 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        $productos = Producto::with('categoria')->get();
-        return response()->json($productos);
+        try {
+            $productos = Producto::with(['categoria', 'descuento']) // Incluir la relación con descuentos
+                ->where('estado', 1)
+                ->get();
+    
+            return response()->json($productos);
+        } catch (\Exception $e) {
+            Log::error('Error en index: ' . $e->getMessage());
+            return response()->json(['error' => 'Ocurrió un error al obtener los productos.'], 500);
+        }
     }
+    
 
     /**
      * Guardar un nuevo producto en la base de datos.
@@ -30,9 +39,9 @@ class ProductoController extends Controller
                 'modelo' => 'nullable|string',
                 'precio' => 'nullable|numeric',
                 'id_categoria' => 'nullable|exists:categorias,id_categoria',
+                'id_descuento' => 'nullable|exists:descuentos,id_descuento', // Validación para id_descuento
             ]);
 
-            // Validación condicional para fotografia_url
             if ($request->hasFile('fotografia_url')) {
                 $request->validate([
                     'fotografia_url' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
@@ -43,7 +52,6 @@ class ProductoController extends Controller
                 ]);
             }
 
-            // Procesar la imagen
             $imageBase64 = null;
             if ($request->hasFile('fotografia_url')) {
                 $image = $request->file('fotografia_url');
@@ -52,7 +60,6 @@ class ProductoController extends Controller
                 $imageBase64 = $request->input('fotografia_url');
             }
 
-            // Crear el producto con la imagen en Base64
             $producto = Producto::create([
                 'nombre_producto' => $request->input('nombre_producto'),
                 'descripcion' => $request->input('descripcion'),
@@ -60,7 +67,9 @@ class ProductoController extends Controller
                 'modelo' => $request->input('modelo'),
                 'fotografia_url' => $imageBase64,
                 'precio' => $request->input('precio'),
+                'estado' => 1, // Estado activo por defecto
                 'id_categoria' => $request->input('id_categoria'),
+                'id_descuento' => $request->input('id_descuento'), // Asignar id_descuento
             ]);
 
             return response()->json(['mensaje' => 'Producto creado con éxito'], 201);
@@ -72,6 +81,7 @@ class ProductoController extends Controller
             return response()->json(['error' => 'Error al crear el producto', 'message' => $e->getMessage()], 500);
         }
     }
+
 
     /**
      * Mostrar un producto específico.
@@ -97,9 +107,9 @@ class ProductoController extends Controller
                 'modelo' => 'required|string',
                 'precio' => 'required|numeric',
                 'id_categoria' => 'required|exists:categorias,id_categoria',
+                'id_descuento' => 'nullable|exists:descuentos,id_descuento', // Validación para id_descuento
             ]);
 
-            // Validación condicional para fotografia_url
             if ($request->hasFile('fotografia_url')) {
                 $request->validate([
                     'fotografia_url' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
@@ -110,15 +120,15 @@ class ProductoController extends Controller
                 ]);
             }
 
-            // Asignar los valores al modelo
             $producto->nombre_producto = $request->input('nombre_producto');
             $producto->descripcion = $request->input('descripcion');
             $producto->marca = $request->input('marca');
             $producto->modelo = $request->input('modelo');
             $producto->precio = $request->input('precio');
             $producto->id_categoria = $request->input('id_categoria');
+            $producto->id_descuento = $request->input('id_descuento'); // Actualizar id_descuento
+            $producto->estado = 1; // Mantener activo
 
-            // Procesar la imagen si es proporcionada
             if ($request->hasFile('fotografia_url')) {
                 $image = $request->file('fotografia_url');
                 $producto->fotografia_url = base64_encode(file_get_contents($image->path()));
@@ -137,7 +147,6 @@ class ProductoController extends Controller
             return response()->json(['error' => 'Error al actualizar el producto', 'message' => $e->getMessage()], 500);
         }
     }
-
     /**
      * Eliminar un producto específico de la base de datos.
      */
@@ -145,12 +154,13 @@ class ProductoController extends Controller
     {
         try {
             $producto = Producto::findOrFail($id);
-            $producto->delete();
+            $producto->estado = 0; // Cambiar estado a inactivo en lugar de eliminar
+            $producto->save();
 
-            return response()->json(['mensaje' => 'Producto eliminado con éxito'], 200);
+            return response()->json(['mensaje' => 'Producto marcado como inactivo'], 200);
         } catch (\Exception $e) {
-            Log::error('Error al eliminar el producto: ' . $e->getMessage());
-            return response()->json(['error' => 'Error al eliminar el producto', 'message' => $e->getMessage()], 500);
+            Log::error('Error al marcar el producto como inactivo: ' . $e->getMessage());
+            return response()->json(['error' => 'Error al marcar el producto como inactivo', 'message' => $e->getMessage()], 500);
         }
     }
 }

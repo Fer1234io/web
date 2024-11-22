@@ -3,9 +3,12 @@
       <side-bar>
         <template slot="links">
           <!-- Enlaces específicos para el rol de Gerente -->
-          <sidebar-link to="/gerente/notifications" name="Notifications" icon="ti-bell" />
+          <sidebar-link to="/gerente/dashboard" name="Dashboard" icon="ti-panel" />
+          <sidebar-link to="/gerente/stats" name="User Profile" icon="ti-user" />
           <sidebar-link to="/gerente/stats" name="User Stats" icon="ti-stats-up" />
-          <sidebar-link to="/gerente/GerenteUsuario" name="Administrar Usuarios" icon="ti-user" />
+          <sidebar-link to="/gerente/Roles" name="Adminstrar Funciones" icon="ti-fullscreen" />
+          <sidebar-link to="/gerente/Usuarios" name="Adminstrar Usuarios" icon="ti-fullscreen" />
+          <sidebar-link to="/gerente/Reportes" name="Adminstrar Reportes" icon="ti-fullscreen" />
           <!-- Otros enlaces según sea necesario -->
   
           <!-- Botón de Cerrar Sesión -->
